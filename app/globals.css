@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-background text-white antialiased;
+}
+
+.glass-card {
+  @apply bg-card border border-white/5 shadow-lg shadow-black/40 backdrop-blur-md;
+}
+
