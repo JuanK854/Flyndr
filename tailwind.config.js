@@ -8,22 +8,25 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['Outfit', 'sans-serif'],
+        body: ['DM Sans', 'sans-serif'],
+      },
       colors: {
-        background: '#0a0f1e',
-        accent: '#3b82f6',
-        card: 'rgba(31, 41, 55, 0.9)'
+        bg: { primary: '#06080f', secondary: '#0c1022', card: 'rgba(14, 19, 40, 0.85)' },
+        accent: { cyan: '#00d4ff', amber: '#ffb800', emerald: '#34d399', rose: '#fb7185' },
+        txt: { primary: '#f0f2f8', secondary: '#8891a5', muted: '#4a5168' },
       },
       keyframes: {
         'fade-in-up': {
-          '0%': { opacity: 0, transform: 'translateY(12px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' }
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
         }
       },
       animation: {
-        'fade-in-up': 'fade-in-up 0.4s ease-out forwards'
+        'fade-in-up': 'fade-in-up 0.5s ease-out forwards'
       }
     }
   },
   plugins: []
 };
-

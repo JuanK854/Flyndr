@@ -1,60 +1,113 @@
-export default function FlightCard({ flight, index }) {
+'use client';
+
+export default function FlightCard({ flight, index, isFavorite, onToggleFavorite }) {
+  const stopsLabel = flight.stops === 0 ? 'Nonstop' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`;
+  const stopsColor = flight.stops === 0 ? 'badge-emerald' : 'badge-amber';
+
   return (
     <article
-      className="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4 animate-fade-in-up"
-      style={{ animationDelay: `${index * 80}ms` }}
+      className="glass-card rounded-2xl overflow-hidden animate-fade-in-up group hover:border-white/[0.12] transition-all duration-300"
+      style={{ animationDelay: `${index * 60}ms` }}
     >
-      <header className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-gray-400">
-            Airline
-          </p>
-          <h3 className="text-base sm:text-lg font-semibold">
-            {flight.airline}
-          </h3>
-        </div>
-        <p className="text-xl sm:text-2xl font-bold text-accent">
-          ${flight.priceUsd}
-          <span className="ml-1 text-xs font-medium text-gray-400">USD</span>
-        </p>
-      </header>
+      {/* Top accent bar */}
+      <div className="h-[2px] bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className="text-left">
-            <p className="text-xs uppercase tracking-wide text-gray-400">
-              From
-            </p>
-            <p className="text-sm sm:text-base font-semibold">
-              {flight.origin}
-            </p>
+      <div className="p-4 sm:p-5">
+        {/* Header: Airline + Price */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            {/* Airline icon circle */}
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/[0.06] flex items-center justify-center text-xs font-bold font-display text-accent-cyan tracking-wider shrink-0">
+              {flight.airlineCode || flight.airline?.slice(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold leading-tight">{flight.airline}</h3>
+              <p className="text-xs text-txt-muted mt-0.5">{flight.flightNumber || ''}</p>
+            </div>
           </div>
-          <div className="h-px flex-1 bg-gradient-to-r from-accent/20 via-accent/70 to-accent/20" />
-          <div className="text-right">
-            <p className="text-xs uppercase tracking-wide text-gray-400">
-              To
-            </p>
-            <p className="text-sm sm:text-base font-semibold">
-              {flight.destination}
-            </p>
+
+          <div className="text-right flex items-start gap-2">
+            <div>
+              <p className="text-xl sm:text-2xl font-bold font-display text-accent-cyan leading-none">
+                ${flight.price}
+              </p>
+              <p className="text-[10px] text-txt-muted mt-0.5 uppercase tracking-wider">{flight.currency || 'USD'}</p>
+            </div>
+            {onToggleFavorite && (
+              <button
+                onClick={() => onToggleFavorite(flight)}
+                className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.06] transition-colors"
+                aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24"
+                     fill={isFavorite ? '#fb7185' : 'none'}
+                     stroke={isFavorite ? '#fb7185' : '#4a5168'}
+                     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                     className="transition-colors">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-gray-300">
-          <span className="inline-flex items-center gap-1 rounded-full bg-slate-800/70 px-3 py-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            {flight.departureTime}
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-slate-800/70 px-3 py-1">
-            <span className="h-0.5 w-5 rounded-full bg-accent" />
-            {flight.duration}
-          </span>
-          <span className="inline-flex rounded-full bg-slate-800/70 px-3 py-1">
-            {flight.stops}
-          </span>
+        {/* Route visualization */}
+        <div className="flex items-center gap-3 sm:gap-4 mb-4">
+          {/* Origin */}
+          <div className="text-left min-w-0">
+            <p className="text-lg sm:text-xl font-bold font-display leading-none">{flight.departureTime}</p>
+            <p className="text-sm font-semibold mt-1">{flight.origin}</p>
+            {flight.originCity && (
+              <p className="text-[11px] text-txt-muted truncate max-w-[100px]">{flight.originCity}</p>
+            )}
+          </div>
+
+          {/* Flight path */}
+          <div className="flex-1 flex flex-col items-center gap-1 px-2">
+            <p className="text-[10px] text-txt-muted tracking-wide">{flight.duration}</p>
+            <div className="w-full flex items-center gap-1">
+              <div className="h-[3px] w-[3px] rounded-full bg-accent-cyan shrink-0" />
+              <div className="flex-1 h-[1px] bg-gradient-to-r from-accent-cyan/60 via-white/10 to-accent-amber/60 relative">
+                {flight.stops > 0 && (
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent-amber border border-bg-primary" />
+                )}
+              </div>
+              <div className="h-[3px] w-[3px] rounded-full bg-accent-amber shrink-0" />
+            </div>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${stopsColor}`}>
+              {stopsLabel}
+            </span>
+          </div>
+
+          {/* Destination */}
+          <div className="text-right min-w-0">
+            <p className="text-lg sm:text-xl font-bold font-display leading-none">{flight.arrivalTime || '—'}</p>
+            <p className="text-sm font-semibold mt-1">{flight.destination}</p>
+            {flight.destinationCity && (
+              <p className="text-[11px] text-txt-muted truncate max-w-[100px]">{flight.destinationCity}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Footer badges */}
+        <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.04]">
+          {flight.cabinClass && (
+            <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-white/[0.04] text-txt-secondary">
+              {flight.cabinClass}
+            </span>
+          )}
+          {flight.seatsLeft && flight.seatsLeft <= 5 && (
+            <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-accent-rose/10 text-accent-rose border border-accent-rose/20">
+              {flight.seatsLeft} left
+            </span>
+          )}
+          {flight.source && (
+            <span className="ml-auto text-[10px] uppercase tracking-wider text-txt-muted">
+              {flight.source === 'amadeus' ? '● Live' : '● Demo'}
+            </span>
+          )}
         </div>
       </div>
     </article>
   );
 }
-
