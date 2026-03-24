@@ -105,8 +105,10 @@ export default function HomePage() {
           </p>
         </header>
 
-        {/* Búsqueda */}
-        <SearchForm onSearch={handleSearch} loading={loading} />
+        {/* Búsqueda: z-index e isolate para que el autocompletado quede por encima de rutas/historial */}
+        <div className="relative z-30 isolate">
+          <SearchForm onSearch={handleSearch} loading={loading} />
+        </div>
 
         {/* Badge de fuente de datos */}
         {hasSearched && !loading && dataSource && (
@@ -133,10 +135,10 @@ export default function HomePage() {
 
         {/* Rutas populares e historial (solo cuando no hay búsqueda activa) */}
         {!hasSearched && (
-          <>
+          <div className="relative z-0 space-y-2">
             <PopularRoutes onQuickSearch={handleQuickSearch} />
             <SearchHistory onQuickSearch={handleQuickSearch} refreshKey={historyRefresh} />
-          </>
+          </div>
         )}
 
         <footer className="mt-16 pb-6 text-center">

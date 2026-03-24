@@ -20,7 +20,7 @@ export default function SearchHistory({ onQuickSearch, refreshKey }) {
   if (history.length === 0) return null;
 
   return (
-    <section className="mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
+    <section className="relative z-0 mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-txt-secondary uppercase tracking-[0.15em] flex items-center gap-2">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-txt-muted">

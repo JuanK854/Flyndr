@@ -87,7 +87,7 @@ export default function AirportInput({ value, onChange, placeholder, icon, label
   };
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative isolate">
       <label className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-txt-muted mb-1.5">
         {label}
       </label>
