@@ -6,21 +6,15 @@ export async function GET() {
     const history = await getSearchHistory(15);
     return NextResponse.json({ success: true, history });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch search history', message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al obtener historial', message: error.message }, { status: 500 });
   }
 }
 
 export async function DELETE() {
   try {
     await clearSearchHistory();
-    return NextResponse.json({ success: true, message: 'Search history cleared' });
+    return NextResponse.json({ success: true, message: 'Historial eliminado' });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to clear search history', message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al limpiar historial', message: error.message }, { status: 500 });
   }
 }

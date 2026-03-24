@@ -3,41 +3,68 @@ import { searchFlightsAmadeus, isAmadeusConfigured } from '@/app/lib/amadeus';
 import { searchMockFlights } from '@/app/lib/mockData';
 import { logSearch } from '@/app/lib/db';
 
+function validateIATA(code) {
+  return /^[A-Z]{3}$/.test(code?.toUpperCase() || '');
+}
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const origin = searchParams.get('origin');
-    const destination = searchParams.get('destination');
+    const origin = searchParams.get('origin')?.toUpperCase()?.trim();
+    const destination = searchParams.get('destination')?.toUpperCase()?.trim();
     const departureDate = searchParams.get('date');
     const passengers = parseInt(searchParams.get('passengers') || '1', 10);
     const cabinClass = searchParams.get('class') || 'economy';
 
+    // Validación de campos requeridos
     if (!origin || !destination) {
       return NextResponse.json(
-        { error: 'Origin and destination are required' },
+        { error: 'Origen y destino son requeridos' },
         { status: 400 }
       );
     }
 
-    // Log search to database
+    // Validación de formato IATA (3 letras)
+    if (!validateIATA(origin)) {
+      return NextResponse.json(
+        { error: 'El código de origen debe tener 3 letras (ej. MEX, LAX)' },
+        { status: 400 }
+      );
+    }
+
+    if (!validateIATA(destination)) {
+      return NextResponse.json(
+        { error: 'El código de destino debe tener 3 letras (ej. CUN, JFK)' },
+        { status: 400 }
+      );
+    }
+
+    if (origin === destination) {
+      return NextResponse.json(
+        { error: 'El origen y destino no pueden ser iguales' },
+        { status: 400 }
+      );
+    }
+
+    if (passengers < 1 || passengers > 9) {
+      return NextResponse.json(
+        { error: 'El número de pasajeros debe estar entre 1 y 9' },
+        { status: 400 }
+      );
+    }
+
+    // Registrar búsqueda en base de datos
     await logSearch({ origin, destination, departureDate, passengers, cabinClass });
 
     let flights = [];
     let dataSource = 'mock';
 
-    // Try Amadeus API first, fall back to mock data
     if (isAmadeusConfigured() && departureDate) {
       try {
-        flights = await searchFlightsAmadeus({
-          origin,
-          destination,
-          departureDate,
-          passengers,
-          cabinClass
-        });
+        flights = await searchFlightsAmadeus({ origin, destination, departureDate, passengers, cabinClass });
         dataSource = 'amadeus';
       } catch (err) {
-        console.warn('Amadeus API error, falling back to mock data:', err.message);
+        console.warn('Amadeus API error, usando datos de prueba:', err.message);
         flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
       }
     } else {
@@ -52,9 +79,9 @@ export async function GET(request) {
       flights
     });
   } catch (error) {
-    console.error('Flight search error:', error);
+    console.error('Error en búsqueda de vuelos:', error);
     return NextResponse.json(
-      { error: 'Internal server error', message: error.message },
+      { error: 'Error interno del servidor', message: error.message },
       { status: 500 }
     );
   }

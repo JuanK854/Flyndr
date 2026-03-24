@@ -17,15 +17,6 @@ module.exports = {
         accent: { cyan: '#00d4ff', amber: '#ffb800', emerald: '#34d399', rose: '#fb7185' },
         txt: { primary: '#f0f2f8', secondary: '#8891a5', muted: '#4a5168' },
       },
-      keyframes: {
-        'fade-in-up': {
-          '0%': { opacity: '0', transform: 'translateY(16px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' }
-        }
-      },
-      animation: {
-        'fade-in-up': 'fade-in-up 0.5s ease-out forwards'
-      }
     }
   },
   plugins: []

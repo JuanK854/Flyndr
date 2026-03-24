@@ -27,7 +27,6 @@ export default function FavoritesPage() {
     setFavorites(prev => prev.filter(f => f.flight_id !== fid));
   };
 
-  // Normalize DB rows to FlightCard format
   const normalizeFav = (f) => ({
     flightId: f.flight_id,
     airline: f.airline,
@@ -48,10 +47,11 @@ export default function FavoritesPage() {
       <div className="mx-auto max-w-4xl">
         <header className="mb-8 animate-fade-in">
           <h1 className="text-2xl sm:text-3xl font-bold font-display tracking-tight mb-2">
-            Saved Flights
+            Vuelos Guardados
           </h1>
           <p className="text-sm text-txt-secondary">
-            Your favorite flights stored in the database. {favorites.length > 0 && `${favorites.length} saved.`}
+            Tus vuelos favoritos almacenados en la base de datos.
+            {favorites.length > 0 && ` ${favorites.length} guardado${favorites.length !== 1 ? 's' : ''}.`}
           </p>
         </header>
 
@@ -79,9 +79,9 @@ export default function FavoritesPage() {
                 <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
               </svg>
             </div>
-            <h3 className="text-base font-semibold mb-1">No favorites yet</h3>
+            <h3 className="text-base font-semibold mb-1">Sin favoritos aún</h3>
             <p className="text-sm text-txt-secondary max-w-sm mx-auto">
-              Search for flights and tap the heart icon to save them here.
+              Busca vuelos y toca el corazón para guardarlos aquí.
             </p>
           </div>
         ) : (

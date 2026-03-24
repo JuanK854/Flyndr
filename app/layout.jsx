@@ -2,13 +2,13 @@ import './globals.css';
 import Navbar from './components/Navbar';
 
 export const metadata = {
-  title: 'Flyndr — Find Your Next Flight',
-  description: 'Full-stack flight search platform powered by Node.js, Amadeus API, and SQLite'
+  title: 'Flyndr — Encuentra tu próximo vuelo',
+  description: 'Aplicación web orientada a servicios con Next.js, API de Amadeus y SQLite'
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="es" className="dark">
       <body className="font-body bg-bg-primary text-txt-primary min-h-screen">
         <Navbar />
         <div className="relative z-10">

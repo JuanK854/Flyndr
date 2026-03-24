@@ -6,10 +6,7 @@ export async function GET() {
     const favorites = await getFavorites();
     return NextResponse.json({ success: true, favorites });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch favorites', message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al obtener favoritos', message: error.message }, { status: 500 });
   }
 }
 
@@ -19,18 +16,15 @@ export async function POST(request) {
 
     if (!body.flightId || !body.airline || !body.origin || !body.destination || !body.price) {
       return NextResponse.json(
-        { error: 'Missing required fields: flightId, airline, origin, destination, price' },
+        { error: 'Campos requeridos: flightId, airline, origin, destination, price' },
         { status: 400 }
       );
     }
 
     await addFavorite(body);
-    return NextResponse.json({ success: true, message: 'Flight added to favorites' });
+    return NextResponse.json({ success: true, message: 'Vuelo agregado a favoritos' });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to add favorite', message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al agregar favorito', message: error.message }, { status: 500 });
   }
 }
 
@@ -40,18 +34,12 @@ export async function DELETE(request) {
     const flightId = searchParams.get('flightId');
 
     if (!flightId) {
-      return NextResponse.json(
-        { error: 'flightId is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'flightId es requerido' }, { status: 400 });
     }
 
     await removeFavorite(flightId);
-    return NextResponse.json({ success: true, message: 'Flight removed from favorites' });
+    return NextResponse.json({ success: true, message: 'Vuelo eliminado de favoritos' });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to remove favorite', message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al eliminar favorito', message: error.message }, { status: 500 });
   }
 }

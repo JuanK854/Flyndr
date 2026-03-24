@@ -4,10 +4,10 @@ import { useMemo, useState } from 'react';
 import FlightCard from './FlightCard';
 
 const SORT_OPTIONS = [
-  { value: 'price-asc', label: 'Price ↑' },
-  { value: 'price-desc', label: 'Price ↓' },
-  { value: 'duration', label: 'Duration' },
-  { value: 'departure', label: 'Departure' },
+  { value: 'price-asc', label: 'Precio ↑' },
+  { value: 'price-desc', label: 'Precio ↓' },
+  { value: 'duration', label: 'Duración' },
+  { value: 'departure', label: 'Salida' },
 ];
 
 export default function FlightList({ flights, loading, hasSearched, favoriteIds, onToggleFavorite }) {
@@ -17,11 +17,9 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
   const filteredAndSorted = useMemo(() => {
     let result = [...flights];
 
-    // Filter by stops
     if (stopsFilter === 'nonstop') result = result.filter(f => f.stops === 0);
     else if (stopsFilter === '1stop') result = result.filter(f => f.stops <= 1);
 
-    // Sort
     result.sort((a, b) => {
       switch (sort) {
         case 'price-asc': return a.price - b.price;
@@ -35,7 +33,6 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
     return result;
   }, [flights, sort, stopsFilter]);
 
-  // Loading skeletons
   if (loading) {
     return (
       <div className="mt-6 space-y-3">
@@ -44,7 +41,7 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
           <div className="skeleton h-8 w-24 ml-auto" />
         </div>
         {[0, 1, 2, 3].map(i => (
-          <div key={i} className="glass-card rounded-2xl p-5" style={{ animationDelay: `${i * 100}ms` }}>
+          <div key={i} className="glass-card rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="skeleton w-10 h-10 rounded-xl" />
@@ -66,10 +63,8 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
     );
   }
 
-  // Empty state before search
   if (!hasSearched) return null;
 
-  // No results
   if (flights.length === 0) {
     return (
       <div className="mt-12 text-center animate-fade-in">
@@ -78,33 +73,30 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
             <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
           </svg>
         </div>
-        <h3 className="text-base font-semibold mb-1">No flights found</h3>
+        <h3 className="text-base font-semibold mb-1">Sin resultados</h3>
         <p className="text-sm text-txt-secondary max-w-sm mx-auto">
-          We couldn&apos;t find flights for that route. Try different airports or adjust your dates.
+          No encontramos vuelos para esa ruta. Intenta con diferentes aeropuertos o fechas.
         </p>
       </div>
     );
   }
 
-  // Cheapest price
   const cheapest = Math.min(...flights.map(f => f.price));
 
   return (
     <div className="mt-6 animate-fade-in">
-      {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <p className="text-sm text-txt-secondary">
-          <span className="text-txt-primary font-semibold">{filteredAndSorted.length}</span> flight{filteredAndSorted.length !== 1 ? 's' : ''} found
-          <span className="ml-2 text-accent-cyan font-semibold">from ${cheapest}</span>
+          <span className="text-txt-primary font-semibold">{filteredAndSorted.length}</span> vuelo{filteredAndSorted.length !== 1 ? 's' : ''} encontrado{filteredAndSorted.length !== 1 ? 's' : ''}
+          <span className="ml-2 text-accent-cyan font-semibold">desde ${cheapest}</span>
         </p>
 
         <div className="flex items-center gap-2">
-          {/* Stops filter */}
           <div className="flex items-center rounded-lg bg-white/[0.03] border border-white/[0.06] overflow-hidden">
             {[
-              { value: 'all', label: 'All' },
-              { value: 'nonstop', label: 'Direct' },
-              { value: '1stop', label: '≤1 stop' },
+              { value: 'all', label: 'Todos' },
+              { value: 'nonstop', label: 'Directo' },
+              { value: '1stop', label: '≤1 escala' },
             ].map(opt => (
               <button
                 key={opt.value}
@@ -120,7 +112,6 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
             ))}
           </div>
 
-          {/* Sort */}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
@@ -133,7 +124,6 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
         </div>
       </div>
 
-      {/* Results */}
       <div className="space-y-3">
         {filteredAndSorted.map((flight, i) => (
           <FlightCard
@@ -148,7 +138,7 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
 
       {filteredAndSorted.length === 0 && flights.length > 0 && (
         <div className="text-center py-8">
-          <p className="text-sm text-txt-secondary">No flights match your filters. Try adjusting them.</p>
+          <p className="text-sm text-txt-secondary">Ningún vuelo coincide con los filtros. Intenta ajustarlos.</p>
         </div>
       )}
     </div>

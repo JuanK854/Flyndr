@@ -1,12 +1,14 @@
 import initSqlJs from 'sql.js';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
 
-const DB_PATH = path.join(process.cwd(), 'data', 'flyndr.db');
+const DATA_DIR = path.join(process.cwd(), 'data');
+const DB_PATH = path.join(DATA_DIR, 'flyndr.db');
 
 let dbInstance = null;
 
 function saveToDisk(db) {
+  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
   const data = db.export();
   const buffer = Buffer.from(data);
   writeFileSync(DB_PATH, buffer);
@@ -24,7 +26,6 @@ export async function getDb() {
     dbInstance = new SQL.Database();
   }
 
-  // Create tables
   dbInstance.run(`
     CREATE TABLE IF NOT EXISTS searches (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,8 +60,6 @@ export async function getDb() {
   return dbInstance;
 }
 
-// ─── Search History ───
-
 export async function logSearch({ origin, destination, departureDate, passengers, cabinClass }) {
   const db = await getDb();
   db.run(
@@ -73,15 +72,10 @@ export async function logSearch({ origin, destination, departureDate, passengers
 
 export async function getSearchHistory(limit = 10) {
   const db = await getDb();
-  const stmt = db.prepare(
-    `SELECT * FROM searches ORDER BY created_at DESC LIMIT ?`
-  );
+  const stmt = db.prepare(`SELECT * FROM searches ORDER BY created_at DESC LIMIT ?`);
   stmt.bind([limit]);
-
   const results = [];
-  while (stmt.step()) {
-    results.push(stmt.getAsObject());
-  }
+  while (stmt.step()) results.push(stmt.getAsObject());
   stmt.free();
   return results;
 }
@@ -92,25 +86,15 @@ export async function clearSearchHistory() {
   saveToDisk(db);
 }
 
-// ─── Favorites ───
-
 export async function addFavorite(flight) {
   const db = await getDb();
   db.run(
     `INSERT OR REPLACE INTO favorites (flight_id, airline, origin, destination, departure_time, arrival_time, duration, stops, price, currency, cabin_class)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      flight.flightId,
-      flight.airline,
-      flight.origin,
-      flight.destination,
-      flight.departureTime,
-      flight.arrivalTime || null,
-      flight.duration,
-      flight.stops || 0,
-      flight.price,
-      flight.currency || 'USD',
-      flight.cabinClass || 'economy'
+      flight.flightId, flight.airline, flight.origin, flight.destination,
+      flight.departureTime, flight.arrivalTime || null, flight.duration,
+      flight.stops || 0, flight.price, flight.currency || 'USD', flight.cabinClass || 'economy'
     ]
   );
   saveToDisk(db);
@@ -125,21 +109,8 @@ export async function removeFavorite(flightId) {
 export async function getFavorites() {
   const db = await getDb();
   const stmt = db.prepare(`SELECT * FROM favorites ORDER BY created_at DESC`);
-
   const results = [];
-  while (stmt.step()) {
-    results.push(stmt.getAsObject());
-  }
+  while (stmt.step()) results.push(stmt.getAsObject());
   stmt.free();
   return results;
-}
-
-export async function isFavorite(flightId) {
-  const db = await getDb();
-  const stmt = db.prepare(`SELECT COUNT(*) as count FROM favorites WHERE flight_id = ?`);
-  stmt.bind([flightId]);
-  stmt.step();
-  const row = stmt.getAsObject();
-  stmt.free();
-  return row.count > 0;
 }

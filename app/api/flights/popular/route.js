@@ -6,9 +6,6 @@ export async function GET() {
     const routes = getPopularRoutes();
     return NextResponse.json({ success: true, routes });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch popular routes' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al obtener rutas populares' }, { status: 500 });
   }
 }

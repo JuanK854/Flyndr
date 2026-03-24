@@ -1,7 +1,7 @@
 'use client';
 
 export default function FlightCard({ flight, index, isFavorite, onToggleFavorite }) {
-  const stopsLabel = flight.stops === 0 ? 'Nonstop' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`;
+  const stopsLabel = flight.stops === 0 ? 'Directo' : `${flight.stops} escala${flight.stops > 1 ? 's' : ''}`;
   const stopsColor = flight.stops === 0 ? 'badge-emerald' : 'badge-amber';
 
   return (
@@ -9,14 +9,12 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
       className="glass-card rounded-2xl overflow-hidden animate-fade-in-up group hover:border-white/[0.12] transition-all duration-300"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      {/* Top accent bar */}
       <div className="h-[2px] bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="p-4 sm:p-5">
-        {/* Header: Airline + Price */}
+        {/* Header: Aerolínea + Precio */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            {/* Airline icon circle */}
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/[0.06] flex items-center justify-center text-xs font-bold font-display text-accent-cyan tracking-wider shrink-0">
               {flight.airlineCode || flight.airline?.slice(0, 2).toUpperCase()}
             </div>
@@ -37,7 +35,7 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
               <button
                 onClick={() => onToggleFavorite(flight)}
                 className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.06] transition-colors"
-                aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24"
                      fill={isFavorite ? '#fb7185' : 'none'}
@@ -51,9 +49,8 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
           </div>
         </div>
 
-        {/* Route visualization */}
+        {/* Ruta */}
         <div className="flex items-center gap-3 sm:gap-4 mb-4">
-          {/* Origin */}
           <div className="text-left min-w-0">
             <p className="text-lg sm:text-xl font-bold font-display leading-none">{flight.departureTime}</p>
             <p className="text-sm font-semibold mt-1">{flight.origin}</p>
@@ -62,7 +59,6 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
             )}
           </div>
 
-          {/* Flight path */}
           <div className="flex-1 flex flex-col items-center gap-1 px-2">
             <p className="text-[10px] text-txt-muted tracking-wide">{flight.duration}</p>
             <div className="w-full flex items-center gap-1">
@@ -79,7 +75,6 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
             </span>
           </div>
 
-          {/* Destination */}
           <div className="text-right min-w-0">
             <p className="text-lg sm:text-xl font-bold font-display leading-none">{flight.arrivalTime || '—'}</p>
             <p className="text-sm font-semibold mt-1">{flight.destination}</p>
@@ -93,17 +88,17 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
         <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.04]">
           {flight.cabinClass && (
             <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-white/[0.04] text-txt-secondary">
-              {flight.cabinClass}
+              {flight.cabinClass === 'economy' ? 'Económica' : flight.cabinClass === 'business' ? 'Business' : 'Primera'}
             </span>
           )}
           {flight.seatsLeft && flight.seatsLeft <= 5 && (
             <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-accent-rose/10 text-accent-rose border border-accent-rose/20">
-              {flight.seatsLeft} left
+              {flight.seatsLeft} lugares
             </span>
           )}
           {flight.source && (
             <span className="ml-auto text-[10px] uppercase tracking-wider text-txt-muted">
-              {flight.source === 'amadeus' ? '● Live' : '● Demo'}
+              {flight.source === 'amadeus' ? '● En vivo' : '● Demo'}
             </span>
           )}
         </div>

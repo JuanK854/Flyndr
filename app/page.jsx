@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SearchForm from './components/SearchForm';
 import FlightList from './components/FlightList';
 import PopularRoutes from './components/PopularRoutes';
@@ -13,10 +13,9 @@ export default function HomePage() {
   const [favoriteIds, setFavoriteIds] = useState(new Set());
   const [dataSource, setDataSource] = useState('');
   const [historyRefresh, setHistoryRefresh] = useState(0);
-  const [lastQuery, setLastQuery] = useState(null);
 
-  // Load favorites on mount
-  useState(() => {
+  // Cargar favoritos al montar (bug fix: useEffect en lugar de useState)
+  useEffect(() => {
     fetch('/api/favorites')
       .then(r => r.json())
       .then(data => {
@@ -25,12 +24,11 @@ export default function HomePage() {
         }
       })
       .catch(() => {});
-  });
+  }, []);
 
   const handleSearch = useCallback(async (query) => {
     setLoading(true);
     setHasSearched(true);
-    setLastQuery(query);
 
     const params = new URLSearchParams({
       origin: query.origin,
@@ -49,9 +47,11 @@ export default function HomePage() {
         setDataSource(data.dataSource);
       } else {
         setFlights([]);
+        setDataSource('');
       }
     } catch {
       setFlights([]);
+      setDataSource('');
     } finally {
       setLoading(false);
       setHistoryRefresh(prev => prev + 1);
@@ -94,21 +94,21 @@ export default function HomePage() {
         {/* Hero */}
         <header className="mb-8 text-center animate-fade-in">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-accent-cyan mb-3">
-            Flight Search Engine
+            Motor de Búsqueda de Vuelos
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight mb-3 bg-gradient-to-r from-white via-white to-txt-secondary bg-clip-text text-transparent">
-            Discover your next
-            <br className="sm:hidden" /> destination
+            Descubre tu próximo
+            <br className="sm:hidden" /> destino
           </h1>
           <p className="max-w-lg mx-auto text-sm text-txt-secondary leading-relaxed">
-            Search real-time flight offers across 25+ routes. Powered by Node.js, Amadeus API, and SQLite.
+            Busca vuelos en tiempo real en más de 25 rutas. Desarrollado con Next.js, API de Amadeus y SQLite.
           </p>
         </header>
 
-        {/* Search */}
+        {/* Búsqueda */}
         <SearchForm onSearch={handleSearch} loading={loading} />
 
-        {/* Data source badge */}
+        {/* Badge de fuente de datos */}
         {hasSearched && !loading && dataSource && (
           <div className="flex justify-center mt-3 animate-fade-in">
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
@@ -117,12 +117,12 @@ export default function HomePage() {
                 : 'bg-white/[0.04] text-txt-muted border border-white/[0.06]'
             }`}>
               <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'amadeus' ? 'bg-accent-cyan' : 'bg-txt-muted'}`} />
-              {dataSource === 'amadeus' ? 'Live Data — Amadeus API' : 'Demo Data — Mock Flights'}
+              {dataSource === 'amadeus' ? 'Datos en vivo — Amadeus API' : 'Datos de demostración'}
             </span>
           </div>
         )}
 
-        {/* Results */}
+        {/* Resultados */}
         <FlightList
           flights={flights}
           loading={loading}
@@ -131,7 +131,7 @@ export default function HomePage() {
           onToggleFavorite={toggleFavorite}
         />
 
-        {/* Show popular routes and history when no search */}
+        {/* Rutas populares e historial (solo cuando no hay búsqueda activa) */}
         {!hasSearched && (
           <>
             <PopularRoutes onQuickSearch={handleQuickSearch} />
@@ -139,10 +139,9 @@ export default function HomePage() {
           </>
         )}
 
-        {/* Footer */}
         <footer className="mt-16 pb-6 text-center">
           <p className="text-xs text-txt-muted">
-            Flyndr &mdash; Built with Next.js 14, Node.js API Routes, SQLite &amp; Amadeus API
+            Flyndr — UTCH DS51M · Next.js 14, Node.js API Routes, SQLite &amp; Amadeus API
           </p>
         </footer>
       </div>

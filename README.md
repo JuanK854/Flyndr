@@ -1,85 +1,98 @@
-# Flyndr — Full-Stack Flight Search Platform
+# Flyndr — Aplicación Web Orientada a Servicios
 
-A **service-oriented web application** built with **Next.js 14**, **Node.js API Routes**, **SQLite**, and **Amadeus API** integration.
+> **UTCH — Tecnologías de la Información · DS51M**  
+> Reporte de investigación: *Aplicaciones web orientadas a servicios*
 
-## Features
+Una aplicación web orientada a servicios construida con **Next.js 14**, **Node.js API Routes**, **SQLite** e integración con la **API de Amadeus**.
 
-- **Real Flight Search** — Integrates with the Amadeus Self-Service API for live flight data
-- **Smart Fallback** — Rich mock data system with 25+ routes, 15 airlines, and dynamic pricing
-- **Persistent Database** — SQLite database for search history and saved favorites
-- **RESTful API** — Clean Node.js API endpoints with proper error handling
-- **Premium UI** — Dark theme with glassmorphism, animations, and responsive design
-- **Favorites System** — Save and manage flights with full CRUD operations
-- **Search History** — Track and re-run previous searches
-- **Filtering & Sorting** — Sort by price, duration, departure; filter by stops
+## Características
 
-## Tech Stack
+- **Búsqueda de Vuelos Real** — Integración con Amadeus Self-Service API para datos en vivo
+- **Datos de Demostración** — Sistema mock con 30+ rutas, 15 aerolíneas y precios dinámicos
+- **Autocompletado de Aeropuertos** — Búsqueda por código IATA o nombre de ciudad (50+ aeropuertos)
+- **Validación de Datos** — Validación en frontend y backend (formato IATA, origen ≠ destino, etc.)
+- **Base de Datos Persistente** — SQLite para historial de búsquedas y favoritos
+- **API RESTful** — Endpoints Node.js limpios con manejo de errores
+- **Interfaz Premium** — Tema oscuro con glassmorphism, animaciones y diseño responsivo
+- **Sistema de Favoritos** — Guardar y gestionar vuelos (CRUD completo)
+- **Historial de Búsquedas** — Rastrear y repetir búsquedas anteriores
+- **Filtros y Ordenamiento** — Ordenar por precio, duración, salida; filtrar por escalas
 
-| Layer | Technology |
-|-------|-----------|
+## Arquitectura (Orientada a Servicios)
+
+```
+Frontend (React)
+    │
+    ▼
+API Interna (Next.js API Routes)  ◄── Validación, procesamiento, control de acceso
+    │
+    ├── /api/flights/search   → Amadeus API / Mock Data
+    ├── /api/flights/popular  → Mock Data
+    ├── /api/airports/search  → Amadeus API / Mock Data  ← NUEVO: Autocompletado
+    ├── /api/favorites        → SQLite
+    └── /api/history          → SQLite
+```
+
+El frontend **nunca** se comunica directamente con servicios externos. Toda la comunicación pasa por la API interna, que oculta las credenciales y procesa las respuestas.
+
+## Stack Tecnológico
+
+| Capa | Tecnología |
+|------|-----------|
 | Frontend | Next.js 14 (App Router), React 18, Tailwind CSS |
 | Backend | Node.js (Next.js API Routes) |
-| Database | SQLite (sql.js) |
-| External API | Amadeus Flight Offers API |
+| Base de datos | SQLite (sql.js) |
+| API Externa | Amadeus Flight Offers API |
+| Autocompletado | Amadeus Locations API / Mock local |
 
-## Architecture
+## Endpoints de la API
 
-```
-app/
-├── api/                       # RESTful API endpoints (Node.js)
-│   ├── flights/search/        # GET - Search flights
-│   ├── flights/popular/       # GET - Popular routes
-│   ├── favorites/             # GET, POST, DELETE - Favorites CRUD
-│   └── history/               # GET, DELETE - Search history
-├── lib/                       # Service layer
-│   ├── db.js                  # SQLite database (sql.js)
-│   ├── amadeus.js             # Amadeus API client (OAuth2)
-│   └── mockData.js            # Mock flight data generator
-├── components/                # React UI components
-├── favorites/page.jsx         # Favorites page
-├── page.jsx                   # Home / search page
-└── layout.jsx                 # Root layout
-```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
+| Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | /api/flights/search | Search flights (origin, destination, date, passengers, class) |
-| GET | /api/flights/popular | Get popular routes |
-| GET | /api/favorites | List saved flights |
-| POST | /api/favorites | Save a flight |
-| DELETE | /api/favorites?flightId=xxx | Remove a favorite |
-| GET | /api/history | Get search history |
-| DELETE | /api/history | Clear search history |
+| GET | /api/flights/search | Buscar vuelos (origin, destination, date, passengers, class) |
+| GET | /api/flights/popular | Rutas populares |
+| GET | /api/airports/search?q=MEX | **Autocompletado de aeropuertos** |
+| GET | /api/favorites | Listar favoritos |
+| POST | /api/favorites | Guardar vuelo |
+| DELETE | /api/favorites?flightId=xxx | Eliminar favorito |
+| GET | /api/history | Historial de búsquedas |
+| DELETE | /api/history | Limpiar historial |
 
-## Getting Started
+## Inicio Rápido
 
 ```bash
 npm install
-
-# Optional: configure Amadeus API for live data
-cp .env.example .env.local
-
 npm run dev
 ```
 
-Open http://localhost:3000
+Abre http://localhost:3000
 
-### Amadeus API Setup (Optional)
+### Configuración Amadeus API (Opcional)
 
-1. Create a free account at developers.amadeus.com
-2. Create a new app in your dashboard
-3. Copy your API Key and API Secret to .env.local
+1. Crea una cuenta gratuita en developers.amadeus.com
+2. Crea una nueva app en tu dashboard
+3. Copia tu API Key y Secret a `.env.local`:
 
-Without API keys, the app uses realistic mock data.
+```env
+AMADEUS_API_KEY=tu_api_key
+AMADEUS_API_SECRET=tu_api_secret
+```
 
-## Database
+Sin credenciales, la app usa datos de demostración realistas.
 
-SQLite stored at data/flyndr.db (auto-created on first run).
+## Base de Datos
 
-Tables: searches, favorites
+SQLite en `data/flyndr.db` (se crea automáticamente al primer uso).
+
+Tablas: `searches`, `favorites`
+
+## Validaciones Implementadas
+
+- Formato IATA estricto (exactamente 3 letras A-Z)
+- Origen y destino deben ser diferentes
+- Pasajeros entre 1 y 9
+- Mensajes de error descriptivos en el formulario
 
 ---
 
-Built for UTECH — Full-stack web application with Node.js, API integration, and database persistence.
+Desarrollado para UTCH · Aplicación fullstack con Node.js, integración de APIs y base de datos.
