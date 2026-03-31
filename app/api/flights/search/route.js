@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import { searchFlightsAviationStack, isAviationStackConfigured } from '@/app/lib/aviationStack';
+import {
+  getFlightsAviationStackRaw,
+  normalizeAviationFlightsResponse,
+  isAviationStackConfigured
+} from '@/app/lib/aviationStack';
 import { searchMockFlights } from '@/app/lib/mockData';
 import { logSearch } from '@/app/lib/db';
 
@@ -61,15 +65,18 @@ export async function GET(request) {
 
     if (isAviationStackConfigured() && departureDate) {
       try {
-        flights = await searchFlightsAviationStack({
-          origin,
-          destination,
-          departureDate,
-          passengers,
-          cabinClass
-        });
-        dataSource = 'aviationstack';
-      } catch {
+        const data = await getFlightsAviationStackRaw({ origin, destination, departureDate });
+        console.log('Aviation Stack response:', JSON.stringify(data, null, 2));
+
+        flights = normalizeAviationFlightsResponse(data, { passengers, cabinClass });
+        dataSource = flights.length > 0 ? 'aviationstack' : 'mock';
+        if (!flights.length) {
+          flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
+        }
+      } catch (error) {
+        if (error?.response) {
+          console.log('Aviation Stack response:', JSON.stringify(error.response, null, 2));
+        }
         flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
       }
     } else {

@@ -17,10 +17,20 @@ async function aviationGet(path, params) {
 
   if (!res.ok || data?.error) {
     const msg = data?.error?.message || `AVIATIONSTACK_REQUEST_FAILED_${res.status}`;
-    throw new Error(msg);
+    const error = new Error(msg);
+    error.response = data;
+    throw error;
   }
 
   return data;
+}
+
+export async function getFlightsAviationStackRaw({ origin, destination, departureDate }) {
+  return aviationGet('/flights', {
+    dep_iata: origin.toUpperCase(),
+    arr_iata: destination.toUpperCase(),
+    ...(departureDate ? { flight_date: departureDate } : {})
+  });
 }
 
 export async function searchFlightsAviationStack({
@@ -30,13 +40,9 @@ export async function searchFlightsAviationStack({
   passengers = 1,
   cabinClass = 'economy'
 }) {
-  const data = await aviationGet('/flights', {
-    dep_iata: origin.toUpperCase(),
-    arr_iata: destination.toUpperCase(),
-    ...(departureDate ? { flight_date: departureDate } : {})
-  });
+  const data = await getFlightsAviationStackRaw({ origin, destination, departureDate });
 
-  return normalizeAviationFlights(data, { passengers, cabinClass });
+  return normalizeAviationFlightsResponse(data, { passengers, cabinClass });
 }
 
 export async function searchAirportsAviationStack(keyword) {
@@ -53,7 +59,7 @@ export async function searchAirportsAviationStack(keyword) {
     }));
 }
 
-function normalizeAviationFlights(data, { passengers, cabinClass }) {
+export function normalizeAviationFlightsResponse(data, { passengers, cabinClass }) {
   return (data.data || []).map((item, i) => {
     const depScheduled = item?.departure?.scheduled || '';
     const arrScheduled = item?.arrival?.scheduled || '';
