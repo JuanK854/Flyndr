@@ -1,7 +1,10 @@
 {
-  "/page": "app/page.js",
-  "/api/flights/popular/route": "app/api/flights/popular/route.js",
-  "/api/history/route": "app/api/history/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/airports/search/route": "app/api/airports/search/route.js",
   "/api/favorites/route": "app/api/favorites/route.js",
-  "/api/airports/search/route": "app/api/airports/search/route.js"
+  "/api/flights/search/route": "app/api/flights/search/route.js",
+  "/api/history/route": "app/api/history/route.js",
+  "/api/flights/popular/route": "app/api/flights/popular/route.js",
+  "/favorites/page": "app/favorites/page.js",
+  "/page": "app/page.js"
 }
