@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { searchAirports } from '@/app/lib/mockData';
-import { searchAirportsAmadeus, isAmadeusConfigured } from '@/app/lib/amadeus';
+import { searchAirportsAviationStack, isAviationStackConfigured } from '@/app/lib/aviationStack';
 
 export async function GET(request) {
   try {
@@ -18,10 +18,10 @@ export async function GET(request) {
 
     let airports = [];
 
-    // Try Amadeus first if configured
-    if (isAmadeusConfigured() && keyword.length >= 2) {
+    // Try Aviation Stack first if configured
+    if (isAviationStackConfigured() && keyword.length >= 2) {
       try {
-        airports = await searchAirportsAmadeus(keyword);
+        airports = await searchAirportsAviationStack(keyword);
       } catch {
         airports = searchAirports(keyword);
       }
@@ -30,9 +30,9 @@ export async function GET(request) {
     }
 
     return NextResponse.json({ success: true, airports });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { error: 'Error al buscar aeropuertos', message: error.message },
+      { error: 'Error al buscar aeropuertos' },
       { status: 500 }
     );
   }

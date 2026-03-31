@@ -1,6 +1,6 @@
 /**
  * Mock Flight Data Service
- * Used as fallback when Amadeus API credentials are not configured.
+ * Used as fallback when Aviation Stack API is unavailable or not configured.
  */
 
 const AIRLINES = {

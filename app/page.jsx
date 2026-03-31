@@ -101,7 +101,7 @@ export default function HomePage() {
             <br className="sm:hidden" /> destino
           </h1>
           <p className="max-w-lg mx-auto text-sm text-txt-secondary leading-relaxed">
-            Busca vuelos en tiempo real en más de 25 rutas. Desarrollado con Next.js, API de Amadeus y SQLite.
+            Busca vuelos en tiempo real en más de 25 rutas. Desarrollado con Next.js, API de Aviation Stack y SQLite.
           </p>
         </header>
 
@@ -114,12 +114,12 @@ export default function HomePage() {
         {hasSearched && !loading && dataSource && (
           <div className="flex justify-center mt-3 animate-fade-in">
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
-              dataSource === 'amadeus'
+              dataSource === 'aviationstack'
                 ? 'badge-cyan'
                 : 'bg-white/[0.04] text-txt-muted border border-white/[0.06]'
             }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'amadeus' ? 'bg-accent-cyan' : 'bg-txt-muted'}`} />
-              {dataSource === 'amadeus' ? 'Datos en vivo — Amadeus API' : 'Datos de demostración'}
+              <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'aviationstack' ? 'bg-accent-cyan' : 'bg-txt-muted'}`} />
+              {dataSource === 'aviationstack' ? 'Datos en vivo — Aviation Stack API' : 'Datos de demostración'}
             </span>
           </div>
         )}
@@ -143,7 +143,7 @@ export default function HomePage() {
 
         <footer className="mt-16 pb-6 text-center">
           <p className="text-xs text-txt-muted">
-            Flyndr — UTCH DS51M · Next.js 14, Node.js API Routes, SQLite &amp; Amadeus API
+            Flyndr — UTCH DS51M · Next.js 14, Node.js API Routes, SQLite &amp; Aviation Stack API
           </p>
         </footer>
       </div>

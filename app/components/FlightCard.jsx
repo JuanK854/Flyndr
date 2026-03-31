@@ -98,7 +98,7 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
           )}
           {flight.source && (
             <span className="ml-auto text-[10px] uppercase tracking-wider text-txt-muted">
-              {flight.source === 'amadeus' ? '● En vivo' : '● Demo'}
+              {flight.source === 'aviationstack' ? '● En vivo' : '● Demo'}
             </span>
           )}
         </div>

@@ -3,11 +3,11 @@
 > **UTCH — Tecnologías de la Información · DS51M**  
 > Reporte de investigación: *Aplicaciones web orientadas a servicios*
 
-Una aplicación web orientada a servicios construida con **Next.js 14**, **Node.js API Routes**, **SQLite** e integración con la **API de Amadeus**.
+Una aplicación web orientada a servicios construida con **Next.js 14**, **Node.js API Routes**, **SQLite** e integración con la **API de Aviation Stack**.
 
 ## Características
 
-- **Búsqueda de Vuelos Real** — Integración con Amadeus Self-Service API para datos en vivo
+- **Búsqueda de Vuelos Real** — Integración con Aviation Stack API para datos en vivo
 - **Datos de Demostración** — Sistema mock con 30+ rutas, 15 aerolíneas y precios dinámicos
 - **Autocompletado de Aeropuertos** — Búsqueda por código IATA o nombre de ciudad (50+ aeropuertos)
 - **Validación de Datos** — Validación en frontend y backend (formato IATA, origen ≠ destino, etc.)
@@ -26,9 +26,9 @@ Frontend (React)
     ▼
 API Interna (Next.js API Routes)  ◄── Validación, procesamiento, control de acceso
     │
-    ├── /api/flights/search   → Amadeus API / Mock Data
+    ├── /api/flights/search   → Aviation Stack API / Mock Data
     ├── /api/flights/popular  → Mock Data
-    ├── /api/airports/search  → Amadeus API / Mock Data  ← NUEVO: Autocompletado
+    ├── /api/airports/search  → Aviation Stack API / Mock Data  ← NUEVO: Autocompletado
     ├── /api/favorites        → SQLite
     └── /api/history          → SQLite
 ```
@@ -42,8 +42,8 @@ El frontend **nunca** se comunica directamente con servicios externos. Toda la c
 | Frontend | Next.js 14 (App Router), React 18, Tailwind CSS |
 | Backend | Node.js (Next.js API Routes) |
 | Base de datos | SQLite (sql.js) |
-| API Externa | Amadeus Flight Offers API |
-| Autocompletado | Amadeus Locations API / Mock local |
+| API Externa | Aviation Stack Flights API |
+| Autocompletado | Aviation Stack Airports API / Mock local |
 
 ## Endpoints de la API
 
@@ -67,15 +67,13 @@ npm run dev
 
 Abre http://localhost:3000
 
-### Configuración Amadeus API (Opcional)
+### Configuración Aviation Stack API (Opcional)
 
-1. Crea una cuenta gratuita en developers.amadeus.com
-2. Crea una nueva app en tu dashboard
-3. Copia tu API Key y Secret a `.env.local`:
+1. Crea una cuenta en aviationstack.com
+2. Copia tu API key a `.env.local`:
 
 ```env
-AMADEUS_API_KEY=tu_api_key
-AMADEUS_API_SECRET=tu_api_secret
+AVIATIONSTACK_API_KEY=tu_api_key
 ```
 
 Sin credenciales, la app usa datos de demostración realistas.

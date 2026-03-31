@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { searchFlightsAmadeus, isAmadeusConfigured } from '@/app/lib/amadeus';
+import { searchFlightsAviationStack, isAviationStackConfigured } from '@/app/lib/aviationStack';
 import { searchMockFlights } from '@/app/lib/mockData';
 import { logSearch } from '@/app/lib/db';
 
@@ -59,12 +59,17 @@ export async function GET(request) {
     let flights = [];
     let dataSource = 'mock';
 
-    if (isAmadeusConfigured() && departureDate) {
+    if (isAviationStackConfigured() && departureDate) {
       try {
-        flights = await searchFlightsAmadeus({ origin, destination, departureDate, passengers, cabinClass });
-        dataSource = 'amadeus';
-      } catch (err) {
-        console.warn('Amadeus API error, usando datos de prueba:', err.message);
+        flights = await searchFlightsAviationStack({
+          origin,
+          destination,
+          departureDate,
+          passengers,
+          cabinClass
+        });
+        dataSource = 'aviationstack';
+      } catch {
         flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
       }
     } else {
@@ -78,10 +83,9 @@ export async function GET(request) {
       query: { origin, destination, departureDate, passengers, cabinClass },
       flights
     });
-  } catch (error) {
-    console.error('Error en búsqueda de vuelos:', error);
+  } catch {
     return NextResponse.json(
-      { error: 'Error interno del servidor', message: error.message },
+      { error: 'Error interno del servidor' },
       { status: 500 }
     );
   }

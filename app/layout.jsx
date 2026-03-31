@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 
 export const metadata = {
   title: 'Flyndr — Encuentra tu próximo vuelo',
-  description: 'Aplicación web orientada a servicios con Next.js, API de Amadeus y SQLite'
+  description: 'Aplicación web orientada a servicios con Next.js, API de Aviation Stack y SQLite'
 };
 
 export default function RootLayout({ children }) {
