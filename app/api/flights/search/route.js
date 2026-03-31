@@ -4,6 +4,7 @@ import {
   normalizeAviationFlightsResponse,
   isAviationStackConfigured
 } from '@/app/lib/aviationStack';
+import { estimateFlightQuote } from '@/app/lib/pricing';
 import { searchMockFlights } from '@/app/lib/mockData';
 import { logSearch } from '@/app/lib/db';
 
@@ -66,22 +67,47 @@ export async function GET(request) {
     if (isAviationStackConfigured() && departureDate) {
       try {
         const data = await getFlightsAviationStackRaw({ origin, destination, departureDate });
-        console.log('Aviation Stack response:', JSON.stringify(data, null, 2));
 
         flights = normalizeAviationFlightsResponse(data, { passengers, cabinClass });
         dataSource = flights.length > 0 ? 'aviationstack' : 'mock';
         if (!flights.length) {
           flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
         }
-      } catch (error) {
-        if (error?.response) {
-          console.log('Aviation Stack response:', JSON.stringify(error.response, null, 2));
-        }
+      } catch {
         flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
       }
     } else {
       flights = searchMockFlights({ origin, destination, departureDate, passengers, cabinClass });
     }
+
+    flights = flights.map((flight) => {
+      if (flight.priceSource && flight.seatsSource) return flight;
+
+      const durationMins = parseDurationToMinutes(flight.duration);
+      const quote = estimateFlightQuote({
+        origin: flight.origin || origin,
+        destination: flight.destination || destination,
+        departureDate,
+        passengers,
+        cabinClass,
+        durationMins,
+        departureTime: flight.departureTime || '',
+        airlineCode: flight.airlineCode || '',
+        flightId: flight.flightId || '',
+        source: flight.source || dataSource
+      });
+
+      return {
+        ...flight,
+        price: Number.isFinite(flight.price) ? flight.price : quote.estimatedPrice,
+        currency: flight.currency || quote.currency,
+        seatsLeft: Number.isFinite(flight.seatsLeft) ? flight.seatsLeft : quote.seatsLeft,
+        priceSource: flight.priceSource || quote.priceSource,
+        seatsSource: flight.seatsSource || quote.seatsSource,
+        confidence: flight.confidence || quote.confidence,
+        factorsApplied: flight.factorsApplied || quote.factorsApplied
+      };
+    });
 
     return NextResponse.json({
       success: true,
@@ -96,4 +122,14 @@ export async function GET(request) {
       { status: 500 }
     );
   }
+}
+
+function parseDurationToMinutes(duration) {
+  if (!duration || typeof duration !== 'string') return 180;
+  const hours = duration.match(/(\d+)\s*h/i);
+  const minutes = duration.match(/(\d+)\s*m/i);
+  const h = hours ? parseInt(hours[1], 10) : 0;
+  const m = minutes ? parseInt(minutes[1], 10) : 0;
+  const total = h * 60 + m;
+  return total > 0 ? total : 180;
 }

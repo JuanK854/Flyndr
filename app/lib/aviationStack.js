@@ -1,3 +1,4 @@
+import { estimateFlightQuote } from '@/app/lib/pricing';
 const BASE_URL = 'http://api.aviationstack.com/v1';
 
 function getApiKey() {
@@ -68,6 +69,19 @@ export function normalizeAviationFlightsResponse(data, { passengers, cabinClass 
     const arrTime = extractTime(arrScheduled);
     const minutes = computeDurationMinutes(depScheduled, arrScheduled);
 
+    const quote = estimateFlightQuote({
+      origin: item?.departure?.iata || '',
+      destination: item?.arrival?.iata || '',
+      departureDate: item?.flight_date || '',
+      passengers,
+      cabinClass,
+      durationMins: minutes,
+      departureTime: depTime,
+      airlineCode: item?.airline?.iata || '',
+      flightId: item?.flight?.iata || item?.flight?.number || String(i),
+      source: 'aviationstack'
+    });
+
     return {
       flightId: item?.flight_date
         ? `avs-${item.flight_date}-${item?.flight?.iata || item?.flight?.number || i}`
@@ -81,15 +95,14 @@ export function normalizeAviationFlightsResponse(data, { passengers, cabinClass 
       arrivalTime: arrTime,
       duration: formatMinutes(minutes),
       stops: 0,
-      price: estimatePriceUSD({
-        durationMins: minutes,
-        passengers,
-        cabinClass,
-        airlineCode: item?.airline?.iata || ''
-      }),
-      currency: 'USD',
+      price: quote.estimatedPrice,
+      currency: quote.currency,
+      priceSource: quote.priceSource,
       cabinClass: String(cabinClass || 'economy').toUpperCase(),
-      seatsLeft: null,
+      seatsLeft: quote.seatsLeft,
+      seatsSource: quote.seatsSource,
+      confidence: quote.confidence,
+      factorsApplied: quote.factorsApplied,
       source: 'aviationstack'
     };
   });
@@ -115,15 +128,6 @@ function formatMinutes(mins) {
   const h = Math.floor(safe / 60);
   const m = safe % 60;
   return `${h}h ${m}m`;
-}
-
-function estimatePriceUSD({ durationMins, passengers = 1, cabinClass = 'economy', airlineCode = '' }) {
-  const baseByDuration = 70 + Math.round(Math.max(60, durationMins) * 0.85);
-  const classMultiplier = cabinClass === 'business' ? 2.6 : cabinClass === 'first' ? 4.2 : 1;
-  const airlineBump =
-    airlineCode === 'UA' || airlineCode === 'DL' || airlineCode === 'AA' ? 1.12 : 1;
-  const pax = Math.max(1, passengers);
-  return Math.round(baseByDuration * classMultiplier * airlineBump * pax);
 }
 
 export function isAviationStackConfigured() {
