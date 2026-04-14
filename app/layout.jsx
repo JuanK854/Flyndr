@@ -2,7 +2,7 @@ import './globals.css';
 import Navbar from './components/Navbar';
 
 export const metadata = {
-  title: 'Flyndr — Encuentra tu próximo vuelo',
+  title: 'Flyndr',
   description: 'Encuentra vuelos por ruta, horario y disponibilidad desde una sola interfaz.'
 };
 
