@@ -58,8 +58,12 @@ export async function GET(request) {
       );
     }
 
-    // Registrar búsqueda en base de datos
-    await logSearch({ origin, destination, departureDate, passengers, cabinClass });
+    // En Vercel el filesystem es efímero; si falla el guardado no debe romper la búsqueda.
+    try {
+      await logSearch({ origin, destination, departureDate, passengers, cabinClass });
+    } catch {
+      // noop
+    }
 
     let flights = [];
     let dataSource = 'mock';
