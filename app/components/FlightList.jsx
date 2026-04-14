@@ -141,6 +141,11 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
           <p className="text-sm text-txt-secondary">Ningún vuelo coincide con los filtros. Intenta ajustarlos.</p>
         </div>
       )}
+
+      <p className="mt-4 text-[11px] text-txt-muted text-center">
+        Horarios, aerolíneas y rutas provienen de fuentes en vivo cuando están disponibles.
+        Precios y disponibilidad pueden mostrarse como estimados.
+      </p>
     </div>
   );
 }

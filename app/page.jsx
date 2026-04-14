@@ -90,18 +90,17 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen mesh-gradient px-4 py-6 sm:py-10">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
         {/* Hero */}
-        <header className="mb-8 text-center animate-fade-in">
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-accent-cyan mb-3">
-            Motor de Búsqueda de Vuelos
+        <header className="mb-10 text-center animate-fade-in">
+          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-accent-cyan/90 mb-3">
+            Flyndr
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight mb-3 bg-gradient-to-r from-white via-white to-txt-secondary bg-clip-text text-transparent">
-            Descubre tu próximo
-            <br className="sm:hidden" /> destino
+            Encuentra vuelos en minutos
           </h1>
-          <p className="max-w-lg mx-auto text-sm text-txt-secondary leading-relaxed">
-            Busca vuelos en tiempo real en más de 25 rutas. Desarrollado con Next.js, API de Aviation Stack y SQLite.
+          <p className="max-w-2xl mx-auto text-sm sm:text-base text-txt-secondary leading-relaxed">
+            Compara opciones por horario, duración, escalas y disponibilidad estimada en una experiencia clara y rápida.
           </p>
         </header>
 
@@ -119,7 +118,7 @@ export default function HomePage() {
                 : 'bg-white/[0.04] text-txt-muted border border-white/[0.06]'
             }`}>
               <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'aviationstack' ? 'bg-accent-cyan' : 'bg-txt-muted'}`} />
-              {dataSource === 'aviationstack' ? 'Datos en vivo — Aviation Stack API' : 'Datos de demostración'}
+              {dataSource === 'aviationstack' ? 'Datos en vivo' : 'Datos de referencia'}
             </span>
           </div>
         )}
@@ -143,7 +142,7 @@ export default function HomePage() {
 
         <footer className="mt-16 pb-6 text-center">
           <p className="text-xs text-txt-muted">
-            Flyndr — UTCH DS51M · Next.js 14, Node.js API Routes, SQLite &amp; Aviation Stack API
+            Flyndr
           </p>
         </footer>
       </div>

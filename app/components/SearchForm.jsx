@@ -56,7 +56,7 @@ export default function SearchForm({ onSearch, loading }) {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <div className="glass-card rounded-2xl p-4 sm:p-6 overflow-visible ring-1 ring-white/[0.04]">
+      <div className="glass-card rounded-2xl p-4 sm:p-6 overflow-visible ring-1 ring-white/[0.07] shadow-[0_12px_50px_rgba(0,0,0,0.25)]">
         {/* Ruta */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-4 sm:gap-3">
           <div className="flex-1 min-w-0 relative z-10 focus-within:z-[60]">
@@ -72,7 +72,7 @@ export default function SearchForm({ onSearch, loading }) {
           <button
             type="button"
             onClick={swapCities}
-            className="relative z-[5] self-center sm:self-end sm:mb-1 w-10 h-10 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center hover:bg-accent-cyan/10 hover:border-accent-cyan/30 transition-all group shrink-0"
+            className="relative z-[5] self-center sm:self-end sm:mb-1 w-10 h-10 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center hover:bg-accent-cyan/10 hover:border-accent-cyan/30 hover:scale-105 transition-all group shrink-0"
             aria-label="Intercambiar ciudades"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-txt-secondary group-hover:text-accent-cyan transition-colors rotate-90 sm:rotate-0">

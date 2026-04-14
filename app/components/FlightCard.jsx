@@ -3,10 +3,16 @@
 export default function FlightCard({ flight, index, isFavorite, onToggleFavorite }) {
   const stopsLabel = flight.stops === 0 ? 'Directo' : `${flight.stops} escala${flight.stops > 1 ? 's' : ''}`;
   const stopsColor = flight.stops === 0 ? 'badge-emerald' : 'badge-amber';
+  const seatsLabel =
+    typeof flight.seatsLeft === 'number'
+      ? `${flight.seatsLeft} asiento${flight.seatsLeft === 1 ? '' : 's'}`
+      : 'Disponibilidad estimada';
+  const detailPill =
+    'text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-white/[0.04] text-txt-secondary border border-white/[0.06]';
 
   return (
     <article
-      className="glass-card rounded-2xl overflow-hidden animate-fade-in-up group hover:border-white/[0.12] transition-all duration-300"
+      className="glass-card rounded-2xl overflow-hidden animate-fade-in-up group hover:border-white/[0.12] hover:shadow-[0_14px_36px_rgba(0,0,0,0.28)] transition-all duration-300"
       style={{ animationDelay: `${index * 60}ms` }}
     >
       <div className="h-[2px] bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -20,7 +26,7 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
             </div>
             <div>
               <h3 className="text-sm font-semibold leading-tight">{flight.airline}</h3>
-              <p className="text-xs text-txt-muted mt-0.5">{flight.flightNumber || ''}</p>
+              <p className="text-xs text-txt-muted mt-0.5">{flight.flightNumber || 'Vuelo programado'}</p>
             </div>
           </div>
 
@@ -29,7 +35,9 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
               <p className="text-xl sm:text-2xl font-bold font-display text-accent-cyan leading-none">
                 ${flight.price}
               </p>
-              <p className="text-[10px] text-txt-muted mt-0.5 uppercase tracking-wider">{flight.currency || 'USD'}</p>
+              <p className="text-[10px] text-txt-muted mt-0.5 uppercase tracking-wider">
+                {flight.currency || 'USD'} {flight.priceSource === 'estimated' ? '· Estimado' : ''}
+              </p>
             </div>
             {onToggleFavorite && (
               <button
@@ -86,19 +94,21 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
 
         {/* Footer badges */}
         <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.04]">
+          <span className={detailPill}>{stopsLabel}</span>
+          <span className={detailPill}>{seatsLabel}</span>
           {flight.cabinClass && (
-            <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-white/[0.04] text-txt-secondary">
+            <span className={detailPill}>
               {flight.cabinClass === 'economy' ? 'Económica' : flight.cabinClass === 'business' ? 'Business' : 'Primera'}
             </span>
           )}
-          {flight.seatsLeft && flight.seatsLeft <= 5 && (
+          {typeof flight.seatsLeft === 'number' && flight.seatsLeft <= 5 && (
             <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-accent-rose/10 text-accent-rose border border-accent-rose/20">
-              {flight.seatsLeft} lugares
+              Quedan pocos
             </span>
           )}
           {flight.source && (
             <span className="ml-auto text-[10px] uppercase tracking-wider text-txt-muted">
-              {flight.source === 'aviationstack' ? '● En vivo' : '● Demo'}
+              {flight.source === 'aviationstack' ? '● Operación en vivo' : '● Referencia'}
             </span>
           )}
         </div>
