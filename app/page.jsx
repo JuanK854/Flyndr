@@ -91,12 +91,11 @@ export default function HomePage() {
   return (
     <main className="min-h-screen mesh-gradient px-4 py-6 sm:py-10">
       <div className="mx-auto max-w-5xl">
-        {/* Hero */}
         <header className="mb-10 text-center animate-fade-in">
-          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-accent-cyan/90 mb-3">
-            Flyndr
+          <p className="section-kicker mb-3">
+            Flyndr Journal
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight mb-3 bg-gradient-to-r from-white via-white to-txt-secondary bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight mb-3 text-txt-primary">
             Encuentra vuelos en minutos
           </h1>
           <p className="max-w-2xl mx-auto text-sm sm:text-base text-txt-secondary leading-relaxed">
@@ -115,7 +114,7 @@ export default function HomePage() {
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
               dataSource === 'aviationstack'
                 ? 'badge-cyan'
-                : 'bg-white/[0.04] text-txt-muted border border-white/[0.06]'
+                : 'bg-[color:var(--surface-ticket)] text-txt-muted border border-[color:var(--border-subtle)]'
             }`}>
               <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'aviationstack' ? 'bg-accent-cyan' : 'bg-txt-muted'}`} />
               {dataSource === 'aviationstack' ? 'Datos en vivo' : 'Datos de referencia'}
@@ -141,8 +140,8 @@ export default function HomePage() {
         )}
 
         <footer className="mt-16 pb-6 text-center">
-          <p className="text-xs text-txt-muted">
-            Flyndr
+          <p className="text-xs text-txt-muted uppercase tracking-[0.15em]">
+            Flyndr - Travel Ledger
           </p>
         </footer>
       </div>

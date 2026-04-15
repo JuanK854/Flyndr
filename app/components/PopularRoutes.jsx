@@ -28,7 +28,7 @@ export default function PopularRoutes({ onQuickSearch }) {
           <button
             key={`${route.origin}-${route.destination}`}
             onClick={() => onQuickSearch({ origin: route.origin, destination: route.destination })}
-            className="glass-card rounded-xl p-3.5 text-left hover:border-accent-cyan/20 hover:bg-white/[0.04] transition-all group animate-fade-in-up"
+            className="glass-card ticket-surface rounded-xl p-3.5 text-left hover:border-[color:var(--border-active)] transition-all group animate-fade-in-up"
             style={{ animationDelay: `${300 + i * 60}ms` }}
           >
             <div className="flex items-center justify-between mb-2">

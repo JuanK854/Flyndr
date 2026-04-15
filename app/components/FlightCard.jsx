@@ -8,20 +8,20 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
       ? `${flight.seatsLeft} asiento${flight.seatsLeft === 1 ? '' : 's'}`
       : 'Disponibilidad estimada';
   const detailPill =
-    'text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-white/[0.04] text-txt-secondary border border-white/[0.06]';
+    'text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-[color:var(--surface-ticket)] text-txt-secondary border border-[color:var(--border-subtle)]';
 
   return (
     <article
-      className="glass-card rounded-2xl overflow-hidden animate-fade-in-up group hover:border-white/[0.12] hover:shadow-[0_14px_36px_rgba(0,0,0,0.28)] transition-all duration-300"
+      className="glass-card ticket-surface rounded-2xl overflow-hidden animate-fade-in-up group hover:border-[color:var(--border-active)] hover:shadow-[0_14px_36px_rgba(0,0,0,0.24)] transition-all duration-300"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      <div className="h-[2px] bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="h-[2px] bg-gradient-to-r from-transparent via-accent-amber/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="p-4 sm:p-5">
         {/* Header: Aerolínea + Precio */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/[0.06] flex items-center justify-center text-xs font-bold font-display text-accent-cyan tracking-wider shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[color:var(--surface-ticket)] to-transparent border border-[color:var(--border-subtle)] flex items-center justify-center text-xs font-bold font-display text-accent-cyan tracking-wider shrink-0">
               {flight.airlineCode || flight.airline?.slice(0, 2).toUpperCase()}
             </div>
             <div>
@@ -42,12 +42,12 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
             {onToggleFavorite && (
               <button
                 onClick={() => onToggleFavorite(flight)}
-                className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/[0.06] transition-colors"
+                className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[color:var(--surface-ticket)] transition-colors"
                 aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24"
-                     fill={isFavorite ? '#fb7185' : 'none'}
-                     stroke={isFavorite ? '#fb7185' : '#4a5168'}
+                     fill={isFavorite ? 'var(--accent-rose)' : 'none'}
+                     stroke={isFavorite ? 'var(--accent-rose)' : 'var(--text-muted)'}
                      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                      className="transition-colors">
                   <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
@@ -71,7 +71,7 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
             <p className="text-[10px] text-txt-muted tracking-wide">{flight.duration}</p>
             <div className="w-full flex items-center gap-1">
               <div className="h-[3px] w-[3px] rounded-full bg-accent-cyan shrink-0" />
-              <div className="flex-1 h-[1px] bg-gradient-to-r from-accent-cyan/60 via-white/10 to-accent-amber/60 relative">
+              <div className="flex-1 h-[1px] bg-gradient-to-r from-accent-cyan/60 via-txt-muted/35 to-accent-amber/60 relative">
                 {flight.stops > 0 && (
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent-amber border border-bg-primary" />
                 )}
@@ -93,7 +93,7 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
         </div>
 
         {/* Footer badges */}
-        <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.04]">
+        <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-[color:var(--border-subtle)]">
           <span className={detailPill}>{stopsLabel}</span>
           <span className={detailPill}>{seatsLabel}</span>
           {flight.cabinClass && (
@@ -102,7 +102,7 @@ export default function FlightCard({ flight, index, isFavorite, onToggleFavorite
             </span>
           )}
           {typeof flight.seatsLeft === 'number' && flight.seatsLeft <= 5 && (
-            <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-accent-rose/10 text-accent-rose border border-accent-rose/20">
+            <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-lg bg-accent-rose/10 text-accent-rose border border-accent-rose/30">
               Quedan pocos
             </span>
           )}

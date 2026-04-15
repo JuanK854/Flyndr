@@ -13,9 +13,23 @@ module.exports = {
         body: ['DM Sans', 'sans-serif'],
       },
       colors: {
-        bg: { primary: '#06080f', secondary: '#0c1022', card: 'rgba(14, 19, 40, 0.85)' },
-        accent: { cyan: '#00d4ff', amber: '#ffb800', emerald: '#34d399', rose: '#fb7185' },
-        txt: { primary: '#f0f2f8', secondary: '#8891a5', muted: '#4a5168' },
+        bg: {
+          primary: 'var(--bg-primary)',
+          secondary: 'var(--bg-secondary)',
+          card: 'var(--bg-card)',
+        },
+        accent: {
+          cyan: 'var(--accent-cyan)',
+          amber: 'var(--accent-amber)',
+          emerald: 'var(--accent-emerald)',
+          rose: 'var(--accent-rose)',
+          ink: 'var(--accent-ink)',
+        },
+        txt: {
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          muted: 'var(--text-muted)',
+        },
       },
     }
   },

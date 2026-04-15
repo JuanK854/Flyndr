@@ -104,7 +104,7 @@ export default function AirportInput({ value, onChange, placeholder, icon, label
           placeholder={placeholder}
           maxLength={3}
           autoComplete="off"
-          className="w-full rounded-xl bg-white/[0.03] border border-white/[0.06] pl-10 pr-8 py-3 text-sm font-semibold font-display tracking-wider focus:outline-none focus:ring-2 focus:ring-accent-cyan/40 focus:border-accent-cyan/30 placeholder:text-txt-muted placeholder:font-normal placeholder:tracking-normal transition-all"
+          className="field-base pl-10 pr-8 py-3 text-sm font-semibold font-display tracking-wider placeholder:text-txt-muted placeholder:font-normal placeholder:tracking-normal"
         />
         {loading && (
           <span className="absolute right-3 top-1/2 -translate-y-1/2">

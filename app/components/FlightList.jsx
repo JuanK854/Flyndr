@@ -68,7 +68,7 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
   if (flights.length === 0) {
     return (
       <div className="mt-12 text-center animate-fade-in">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[color:var(--surface-ticket)] border border-[color:var(--border-subtle)] flex items-center justify-center">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4a5168" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
           </svg>
@@ -88,11 +88,11 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <p className="text-sm text-txt-secondary">
           <span className="text-txt-primary font-semibold">{filteredAndSorted.length}</span> vuelo{filteredAndSorted.length !== 1 ? 's' : ''} encontrado{filteredAndSorted.length !== 1 ? 's' : ''}
-          <span className="ml-2 text-accent-cyan font-semibold">desde ${cheapest}</span>
+          <span className="ml-2 text-accent-amber font-semibold">desde ${cheapest}</span>
         </p>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-lg bg-white/[0.03] border border-white/[0.06] overflow-hidden">
+          <div className="flex items-center rounded-lg bg-[color:var(--surface-ticket)] border border-[color:var(--border-subtle)] overflow-hidden">
             {[
               { value: 'all', label: 'Todos' },
               { value: 'nonstop', label: 'Directo' },
@@ -115,7 +115,7 @@ export default function FlightList({ flights, loading, hasSearched, favoriteIds,
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="rounded-lg bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 text-xs font-medium text-txt-secondary focus:outline-none focus:ring-1 focus:ring-accent-cyan/30 cursor-pointer appearance-none"
+            className="rounded-lg bg-[color:var(--surface-ticket)] border border-[color:var(--border-subtle)] px-3 py-1.5 text-xs font-medium text-txt-secondary focus:outline-none focus:ring-1 focus:ring-accent-cyan/30 cursor-pointer appearance-none"
           >
             {SORT_OPTIONS.map(opt => (
               <option key={opt.value} value={opt.value} className="bg-bg-secondary">{opt.label}</option>

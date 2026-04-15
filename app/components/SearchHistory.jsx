@@ -45,7 +45,7 @@ export default function SearchHistory({ onQuickSearch, refreshKey }) {
               destination: item.destination,
               date: item.departure_date || ''
             })}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs font-medium text-txt-secondary hover:text-txt-primary hover:border-accent-cyan/20 hover:bg-accent-cyan/5 transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[color:var(--surface-ticket)] border border-[color:var(--border-subtle)] text-xs font-medium text-txt-secondary hover:text-txt-primary hover:border-[color:var(--border-active)] hover:bg-accent-cyan/5 transition-all"
           >
             <span className="font-display font-semibold tracking-wide">{item.origin}</span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

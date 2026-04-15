@@ -1,6 +1,7 @@
 {
   "/page": "app/page.js",
-  "/api/history/route": "app/api/history/route.js",
   "/api/flights/popular/route": "app/api/flights/popular/route.js",
-  "/api/favorites/route": "app/api/favorites/route.js"
+  "/icon.svg/route": "app/icon.svg/route.js",
+  "/api/favorites/route": "app/api/favorites/route.js",
+  "/api/history/route": "app/api/history/route.js"
 }
