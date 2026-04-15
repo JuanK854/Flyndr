@@ -58,24 +58,6 @@ El frontend **nunca** se comunica directamente con servicios externos. Toda la c
 | GET | /api/history | Historial de búsquedas |
 | DELETE | /api/history | Limpiar historial |
 
-## Inicio Rápido
-
-```bash
-npm install
-npm run dev
-```
-
-Abre http://localhost:3000
-
-### Configuración Aviation Stack API (Opcional)
-
-1. Crea una cuenta en aviationstack.com
-2. Copia tu API key a `.env.local`:
-
-```env
-AVIATIONSTACK_API_KEY=tu_api_key
-```
-
 Sin credenciales, la app usa datos de demostración realistas.
 
 ## Base de Datos
